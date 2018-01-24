@@ -1,0 +1,5 @@
+create trigger validate_sueldo after update of salary on employee referencing new as new_values old as old_values for each row mode db2sql when (new_values.salary > old_values.salary * 1.3) signal sqlstate '22005' set message_text='salario aumentó más de 30%'
+
+create trigger validate_inventory after insert on orden referencing new as new_values for each row mode db2sql when ((SELECT QUANTITY FROM inventory where inventory.PID = new_values.PID) < new_values.QUANTITY) signal sqlstate '22005' set message_text='no suficientes productos'
+
+create trigger remove_products after update on orden referencing new as new_values for each row mode db2sql when (new_values.status = 'delivered') begin atomic update inventory set quantity = quantity - new_values.quantity where PID = new_values.PID; end
