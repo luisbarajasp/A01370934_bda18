@@ -98,4 +98,4 @@ SELECT orderLineNumber, count(*) FROM orderdetails force index(idx_orderLineNumb
 
 '1','5'
 
-
+Es mejor el ultimo ya que el index está mejor creadode acuerdo al rango y dominio de la base de datos.
