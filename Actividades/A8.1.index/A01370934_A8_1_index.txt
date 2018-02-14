@@ -1,0 +1,101 @@
+SELECT * FROM orderdetails WHERE orderLineNumber = 1 and quantityOrdered > 50;
+609.20
+
+'10342','S18_1889','55','63.14','1'
+'10405','S18_3232','55','147.33','1'
+'10406','S18_3685','65','117.26','1'
+'10409','S24_1937','61','27.88','1'
+'10425','S24_1444','55','53.75','1'
+
+SELECT productCode FROM orderdetails WHERE orderLineNumber = 1 and quantityOrdered > 50;
+609.20
+
+'S24_1937'
+'S24_1444'
+'S18_3685'
+'S18_3232'
+'S18_1889'
+
+SELECT orderLineNumber, count(*) FROM orderdetails WHERE orderLineNumber = 1 and quantityOrdered > 50 group by orderLineNumber;
+609.20
+
+'1','5'
+
+orderLineNumber
+
+SELECT * FROM orderdetails force index(idx_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+92.5
+
+'10425','S24_1444','55','53.75','1'
+'10409','S24_1937','61','27.88','1'
+'10406','S18_3685','65','117.26','1'
+'10405','S18_3232','55','147.33','1'
+'10342','S18_1889','55','63.14','1'
+
+SELECT productCode FROM orderdetails force index(idx_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+95.20
+
+'S18_1889'
+'S18_3232'
+'S18_3685'
+'S24_1937'
+'S24_1444'
+
+SELECT orderLineNumber, count(*) FROM orderdetails force index(idx_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50 group by orderLineNumber;
+95.20
+
+'1','5'
+
+
+(quantityOrdered, orderLineNumber)
+
+SELECT * FROM orderdetails force index(idx_quantity_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+93.41
+
+'10342','S18_1889','55','63.14','1'
+'10405','S18_3232','55','147.33','1'
+'10425','S24_1444','55','53.75','1'
+'10409','S24_1937','61','27.88','1'
+'10406','S18_3685','65','117.26','1'
+
+SELECT productCode FROM orderdetails force index(idx_quantity_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+27.62
+
+'S18_1889'
+'S18_3232'
+'S24_1444'
+'S24_1937'
+'S18_3685'
+
+SELECT orderLineNumber, count(*) FROM orderdetails force index(idx_quantity_orderLineNumber) WHERE orderLineNumber = 1 and quantityOrdered > 50 group by orderLineNumber;
+27.62
+
+'1','5'
+
+(orderLineNumber, quantityOrdered)
+
+SELECT * FROM orderdetails force index(idx_orderLineNumber_quantity) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+8.01
+
+'10342','S18_1889','55','63.14','1'
+'10405','S18_3232','55','147.33','1'
+'10425','S24_1444','55','53.75','1'
+'10409','S24_1937','61','27.88','1'
+'10406','S18_3685','65','117.26','1'
+
+
+SELECT productCode FROM orderdetails force index(idx_orderLineNumber_quantity) WHERE orderLineNumber = 1 and quantityOrdered > 50;
+3.02
+
+'S18_1889'
+'S18_3232'
+'S24_1444'
+'S24_1937'
+'S18_3685'
+
+SELECT orderLineNumber, count(*) FROM orderdetails force index(idx_orderLineNumber_quantity) WHERE orderLineNumber = 1 and quantityOrdered > 50 group by orderLineNumber;
+3.02
+
+'1','5'
+
+
