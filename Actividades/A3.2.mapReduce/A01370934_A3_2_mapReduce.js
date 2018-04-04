@@ -198,7 +198,7 @@ db.restaurants.mapReduce(mapCountPerCuisine, countCountPerCuisine, {out:"perCuis
 var mapCloser = function(){
     var lat = -73.9653967;
     var long = 40.6064339;
-    
+
     this.address.coord
 }
 
@@ -207,3 +207,7 @@ var countCloser = function(name, values){
 }
 
 db.restaurants.mapReduce(mapCloser, countCloser, {out:"closer"}).find();
+
+db.restaurants.find(
+    { "address"."coord" : { $near : [ -73.9653967, 40.6064339 ], $maxDistance: 0.10 } }
+ )
