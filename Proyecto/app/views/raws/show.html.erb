@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @raw.name %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @raw.type %>
+</p>
+
+<p>
+  <strong>Measure:</strong>
+  <%= @raw.measure %>
+</p>
+
+<p>
+  <strong>Cost:</strong>
+  <%= @raw.cost %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @raw.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @raw.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_raw_path(@raw) %> |
+<%= link_to 'Back', raws_path %>

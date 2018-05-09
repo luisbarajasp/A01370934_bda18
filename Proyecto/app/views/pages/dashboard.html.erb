@@ -1,0 +1,246 @@
+<!-- Icon Cards-->
+<div class="row dashboard">
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-primary o-hidden h-100">
+        <div class="card-body">
+            <div class="card-body-icon">
+            <i class="fa fa-fw fa-lemon-o"></i>
+            </div>
+            <div class="mr-5"><%= @raws.count %> registered raws</div>
+        </div>
+        <%= link_to new_raw_path, class: "card-footer text-white clearfix small z-1" do %>
+            <span class="float-left">New raw</span>
+            <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+            </span>
+        <% end %>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-info o-hidden h-100">
+        <div class="card-body">
+            <div class="card-body-icon">
+            <i class="fa fa-fw fa-list"></i>
+            </div>
+            <div class="mr-5"><%= @recipes.count %> registered recipes</div>
+        </div>
+        <%= link_to new_recipe_path, class: "card-footer text-white clearfix small z-1" do %>
+            <span class="float-left">New recipe</span>
+            <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+            </span>
+        <% end %>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-success o-hidden h-100">
+        <div class="card-body">
+            <div class="card-body-icon">
+            <i class="fa fa-fw fa-cutlery"></i>
+            </div>
+            <div class="mr-5"><%= @products.count %> available products</div>
+        </div>
+        <%= link_to new_product_path, class: "card-footer text-white clearfix small z-1" do %>
+            <span class="float-left">New product</span>
+            <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+            </span>
+        <% end %>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mb-3">
+            <div class="mb-0 mt-4 text-warning">
+                <i class="fa fa-bell-o"></i> Products soon to expire
+            </div>
+            <hr class="mt-2">
+            <div class="card">
+                <div class="list-group list-group-flush small">
+                    <% @products.each do |p| %>
+                        <% if (p.expired_at - Date.today).to_i < 6 && p.expired_at >= Date.today %>
+                            <div class="list-group-item list-group-item-action">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <strong><%= p.recipe.name %></strong> will expire in <strong><%= pluralize((p.expired_at - Date.today).to_i, 'day') %></strong>.
+                                        <div class="text-muted smaller">
+                                            It will mean a loss of <%= number_to_currency("%g" % p.recipe.cost) %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <div class="mb-0 mt-4 text-warning">
+                <i class="fa fa-bell-o"></i> Raws soon to expire
+            </div>
+            <hr class="mt-2">
+            <div class="card">
+                <div class="list-group list-group-flush small">
+                    <% @raws.each do |r| %>
+                        <% r.raw_inventories.each do |i| %>
+                            <% if (i.expired_at - Date.today).to_i < 6 && i.expired_at >= Date.today%>
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <strong><%= i.raw.name %></strong> will expire in <strong><%= pluralize((i.expired_at - Date.today).to_i, 'day') %></strong>.
+                                            <div class="text-muted smaller">
+                                                It will mean a loss of <%= number_to_currency("%g" % (i.raw.cost * i.quantity)) %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-0 mt-4">
+        <i class="fa fa-table"></i> Raws available inventory
+    </div>
+    <hr class="mt-2">
+    <div class="card mb-3">
+    <div class="card-body">
+        <div class="table-responsive">
+        <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Measure unit</th>
+                <th>Cost (per unit)</th>
+                <th>Available</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Measure unit</th>
+                <th>Cost (per unit)</th>
+                <th>Available</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            
+            <% @raws.each do |raw| %>
+            <tr>
+                <td><%= raw.name %></td>
+                <td><%= raw.type %></td>
+                <td><%= raw.measure%></td>
+                <td><%= number_to_currency(raw.cost) %></td>
+                <td><%= pluralize("%g" % raw.raw_inventories.map{|ra| ra.quantity_left }.sum, raw.measure) %></td>
+            </tr>
+            <% end %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    </div>
+    <div class="mb-0 mt-4">
+        <i class="fa fa-table"></i> Recipes available products
+    </div>
+    <hr class="mt-2">
+    <div class="card mb-3">
+    <div class="card-body">
+        <div class="table-responsive">
+        <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Available</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Available</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            
+            <% @recipes.each do |recipe| %>
+            <tr>
+                <td><%= recipe.name %></td>
+                <td><%= pluralize("%g" % recipe.quantity, recipe.measure) %></td>
+                <td><%= number_to_currency(recipe.cost) %></td>
+                <td><%= recipe.products.available.count %></td>
+            </tr>
+            <% end %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8">
+        <!-- Example Bar Chart Card-->
+        <div class="mb-0 mt-4">
+            <i class="fa fa-area-chart"></i> Cost of losses for made products that have expired
+        </div>
+        <hr class="mt-2">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                <div class="col-sm-8 my-auto">
+                    <%# <canvas id="myBarChart" width="100" height="50"></canvas> %>
+                    <%= line_chart @bar_data, @bar_options %>
+                </div>
+                <div class="col-sm-4 text-center my-auto">
+                    <div class="h4 mb-0 text-danger"><%= number_to_currency(@total_lost_products) %></div>
+                    <div class="small text-muted">Total losses</div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Example Bar Chart Card-->
+        <div class="mb-0 mt-4">
+            <i class="fa fa-area-chart"></i> Cost of losses for raw inventories that have expired
+        </div>
+        <hr class="mt-2">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                <div class="col-sm-8 my-auto">
+                    <%# <canvas id="myBarChart" width="100" height="50"></canvas> %>
+                    <%= line_chart @bar_data_raws, @bar_options_raws %>
+                </div>
+                <div class="col-sm-4 text-center my-auto">
+                    <div class="h4 mb-0 text-danger"><%= number_to_currency(@total_lost_raws) %></div>
+                    <div class="small text-muted">Total losses</div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Columns Example Social Feed-->
+    </div>
+    <div class="col-lg-4">
+        <!-- Example Pie Chart Card-->
+        <div class="mb-0 mt-4">
+            <i class="fa fa-pie-chart"></i> Current value of warehouses
+        </div>
+        <hr class="mt-2">
+        <div class="card mb-3">
+            <div class="card-body">
+                <%# <canvas id="myPieChart" width="100%" height="100"></canvas> %>
+                <div class="col-sm-12 text-center my-auto">
+                    <div class="h4 mb-0 text-primary"><%= number_to_currency(@warehouses_total_value) %></div>
+                    <div class="small text-muted">Total value</div>
+                </div>
+                <%= pie_chart @warehouses_data, @warehouses_options %>
+            </div>
+        </div>
+            </div>
+        
+    </div>        
+</div>

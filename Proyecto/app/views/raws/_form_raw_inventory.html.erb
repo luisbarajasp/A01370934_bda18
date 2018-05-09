@@ -1,0 +1,8 @@
+<tr>
+    <td><%= f.number_field :quantity %></td>
+    <td><%= f.date_field :expired_at %></td>
+    <td>
+        <%= f.hidden_field :_destroy, value: '0', class: 'destroy' %>
+        <%= link_to 'Delete', '#', class: 'remove'%>
+    </td>
+</tr>

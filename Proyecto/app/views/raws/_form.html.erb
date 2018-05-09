@@ -1,0 +1,32 @@
+<%= simple_form_for(@raw) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :name, placeholder: 'Type in name of the raw product' %>
+    <%= f.input :type, prompt: "Select the type", collection: [['Fresh Product','fresh'],['Meat Product','meat'],['Dairy Product','dairy'],['Frozen Product','frozen'],['Cereal Product','cereal'],['Miscellaneous Product','miscellaneous'],['Other type Product','others']] %>
+    <%= f.input :measure, placeholder: 'E.g. kg, g, mg, etc', hint: 'Measure unit (e.g. kg, g, mg)' %>
+    <%= f.input :cost, hint: 'Cost per measure unit' %>
+    <h2>Inventories</h2>
+    <table class="table">
+      <thead>
+        <th>Quantity</th>
+        <th>Expire at</th>
+        <th></th>
+      </thead>
+      <tbody class="fields">
+        <%= f.simple_fields_for :raw_inventories do |inventory| %>
+          <% if inventory.object.new_record? || (inventory.object.expired == false && inventory.object.quantity_left > 0) %>
+            <%= render 'form_raw_inventory', f: inventory%>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= link_to_add_row('Add inventory', f, :raw_inventories, class: 'btn btn-primary') %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-success' %>
+  </div>
+<% end %>

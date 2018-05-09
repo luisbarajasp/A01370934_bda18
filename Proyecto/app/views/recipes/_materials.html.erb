@@ -1,0 +1,10 @@
+<ul class="list-group list-group-flush">
+    <% if @materials.length < 1%>
+        <li class="list-group-item">No materials</li>
+    <% end %>
+    <% @materials.each do |material| %>
+        <li class="list-group-item">
+            <%= pluralize( "%g" % material.quantity, material.raw.measure ) %> of <%= material.raw.name %>        
+        </li>
+    <% end %>
+</ul>

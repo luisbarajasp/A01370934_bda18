@@ -1,0 +1,12 @@
+<tr>
+    <% if f.object.new_record? %>
+        <td><%= f.input :raw_id, collection: @raws, prompt: "Select the raw", :value_method => :id, label: false %></td>
+    <% else %>
+        <td><%= f.object.raw.name %></td>
+    <% end %>
+    <td><%= f.number_field :quantity %></td>
+    <td>
+        <%= f.hidden_field :_destroy, value: '0', class: 'destroy' %>
+        <%= link_to 'Delete', '#', class: 'remove'%>
+    </td>
+</tr>

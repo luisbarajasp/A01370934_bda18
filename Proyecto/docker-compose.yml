@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  neo4j:
+    image: neo4j:3.0          ## we use neo4j v3
+    ports:                    ## publish ports to have Web UI
+      - "7474:7474"
+    volumes:                  ## adds folder with login/password
+      - ./db/dbms:/data/dbms
+    environment:
+      - NEO4J_AUTH=neo4j/basesdedatos
+
+  website:
+    depends_on:
+      - 'neo4j'
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/app'
+
+volumes:
+  neo4j:

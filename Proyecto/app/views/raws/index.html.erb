@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<div class="raws">
+  <h1>Raws</h1> 
+  <div class="container-fluid">
+    <div class="row">
+      <% @raws.each do |raw| %>
+        <div class="card col-sm-12" id="<%= raw.id %>" style="padding:0;">
+          <div class="card-body">
+            <div class="card-top row">
+            <%= link_to raw do %>
+              <h5 class="card-title col-sm"><%= raw.name %></h5>
+            <% end %>
+              
+              <div class="actions col-sm">
+                <%= link_to edit_raw_path(raw), class: 'card-link' do%>
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                <% end %>
+                <%= link_to raw, method: :delete, data: { confirm: 'Are you sure?' }, class: 'card-link' do %>
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>              
+                <% end %>
+              </div>
+            </div>
+            <h6 class="card-subtitle mb-2 text-muted"><%= raw.type %></h6>
+            <p class="card-text">Cost (per <%= raw.measure %>): <%= number_to_currency("%g" % raw.cost) %></p>
+            <%= link_to raw_inventories_path(raw), remote: true, class: 'see_inventories' do %>
+              <p>See inventories <i class="fa fa-chevron-right" aria-hidden="true"></i></p>
+            <% end %>
+            <div class="inventories"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<%= link_to 'New Raw', new_raw_path, :class => "btn"%>

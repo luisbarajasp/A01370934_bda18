@@ -1,0 +1,30 @@
+
+<%= simple_form_for(@recipe) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :name, placeholder: 'Type in the name for the recipe' %>
+    <%= f.input :quantity, placeholder: 'Type in the total amount of recipe' %>
+    <%= f.input :measure, placeholder: 'E.g. kg, g, mg, etc' %>
+    <h2>Raw Materials</h2>
+    <table class="table">
+      <thead>
+        <th>Raw Material</th>
+        <th>Quantity</th>
+        <th></th>
+      </thead>
+      <tbody class="fields">
+        <%= f.simple_fields_for :recipe_materials do |material| %>
+          <%= render 'form_recipe_material', f: material %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= link_to_add_row('Add recipe material', f, :recipe_materials, class: 'btn btn-primary') %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-success' %>
+  </div>
+<% end %>
